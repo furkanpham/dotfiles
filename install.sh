@@ -10,7 +10,7 @@ files=(
     .tmux.conf              .tmux-gitbar.conf       .XCompose       
     .ncmpcpp/bindings       .ncmpcpp/config         .config/compton.conf
     .config/xfce4/terminal/terminalrc               .config/mpdnotify.conf
-    .config/mpd/mpd.conf
+    .config/mpd/mpd.conf    .config/mpv/mpv.conf
 )
 
 #-------------------------------------------------------------------------------
