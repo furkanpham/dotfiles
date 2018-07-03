@@ -35,6 +35,10 @@ set relativenumber
 " highlight matching braces
 set showmatch
 
+" highlight leading whitespace
+autocmd ColorScheme * highlight ExtraWhiteSpace ctermbg=blue
+autocmd BufWinEnter * match ExtraWhiteSpace /\s\+$/
+
 " intelligent comments
 set comments=sl:/*,mb:\ *,elx:\ */
 
