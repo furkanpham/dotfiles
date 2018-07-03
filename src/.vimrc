@@ -35,7 +35,7 @@ set relativenumber
 " highlight matching braces
 set showmatch
 
-" highlight leading whitespace
+" highlight trailing whitespace
 autocmd ColorScheme * highlight ExtraWhiteSpace ctermbg=blue
 autocmd BufWinEnter * match ExtraWhiteSpace /\s\+$/
 
