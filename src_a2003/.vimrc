@@ -26,8 +26,8 @@ set relativenumber
 set showmatch
 
 " highlight trailing whitespace
-autocmd ColorScheme * highlight ExtraWhiteSpace ctermbg=red
-autocmd BufWinEnter * match ExtraWhiteSpace /\s\+$/
+highlight ExtraWhiteSpace ctermbg=red
+match ExtraWhiteSpace /\s\+$/
 
 " intelligent comments
 set comments=sl:/*,mb:\ *,elx:\ */
@@ -59,8 +59,3 @@ nnoremap <s-tab> <c-w>W
 "==================================
 " Always view statusline
 set laststatus=2
-
-"==================================
-" theming
-"==================================
-colorscheme default
