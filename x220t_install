@@ -1,9 +1,9 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
-# dot-install.sh - just managing my configs :^)
+# x220t_install - just managing my configs :^)
 #-------------------------------------------------------------------------------
 
-dir="${HOME}/git/dotfiles/src"
+dir="${HOME}/git/dotfiles/src_x220t"
 files=(
     .vimrc                  .bashrc                 .bash_aliases       
     .dircolors              .inputrc                .profile        
