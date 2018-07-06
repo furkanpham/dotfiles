@@ -1,0 +1,21 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#-------------------------------------------------------------------------------
+# x220t_install - just managing my configs :^)
+#-------------------------------------------------------------------------------
+
+dir="${HOME}/git/dotfiles/src_a2003"
+files=(
+    .vimrc
+)
+
+#-------------------------------------------------------------------------------
+
+# Change directory to dotfiles directory
+cd "${dir}"
+
+# Start symlinking
+printf "Symlinking\n"
+for file in "${files[@]}"; do
+    printf "    %s\n" "${file}"
+    ln -sfn "${dir}/${file}" "${HOME}/${file}"
+done
