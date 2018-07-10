@@ -39,9 +39,13 @@ alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
+
+# git
 alias gs='git status'
 alias gb='git branch'
 alias gd='git diff'
+MY_GIT_REPOS=( adb-opus dotfiles townofstats )
+function gs-all() { for d in ${MY_GIT_REPOS[@]}; do cd ${HOME}/git/${d}; echo ${PWD}; git status --short; done; }
 
 # music
 alias fix-mpd='sudo service mpd stop && mpd'
