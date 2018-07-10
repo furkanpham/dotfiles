@@ -39,6 +39,9 @@ alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
+alias gs='git status'
+alias gb='git branch'
+alias gd='git diff'
 
 # music
 alias fix-mpd='sudo service mpd stop && mpd'

@@ -26,5 +26,10 @@ alias mv='mv -i'
 alias mkdir='mkdir -v'
 alias wget='wget -c'
 
+# git
+alias gs='git status'
+alias gb='git branch'
+alias gd='git diff'
+
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
