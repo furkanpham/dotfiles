@@ -44,8 +44,15 @@ alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
 alias gs='git status'
 alias gb='git branch'
 alias gd='git diff'
-MY_GIT_REPOS=( adb-opus dotfiles townofstats )
-function gs-all() { for d in ${MY_GIT_REPOS[@]}; do cd ${HOME}/git/${d}; echo ${PWD}; git status --short; done; }
+function gs-all() { # `git status` all my repos quickly
+    MY_GIT_REPOS=( adb-opus dotfiles townofstats )
+    for d in ${MY_GIT_REPOS[@]}; do
+        pushd ${HOME}/git/${d} >/dev/null
+        echo ${PWD}
+        git status --short
+        popd >/dev/null
+    done
+}
 
 # music
 alias fix-mpd='sudo service mpd stop && mpd'
