@@ -48,18 +48,21 @@ autocmd FileType tex hi clear texItalStyle
 " disable automatic comment insertions
 autocmd BufNewFile,BufRead * setlocal formatoptions+=cqn
 
-" use arduino syntaxes 
+" use arduino syntaxes
 autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 
 "==================================
-" editing 
-"================================== 
+" editing
+"==================================
 " new line inserts
 nnoremap <return> o<esc>
 
+" remove all trailing whitespace
+nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+
 "==================================
-" navigation 
-"================================== 
+" navigation
+"==================================
 nnoremap <c-j> <c-f>
 nnoremap <c-k> <c-b>
 
@@ -69,7 +72,7 @@ nnoremap <s-tab> <c-w>W
 
 "==================================
 " tmux
-"================================== 
+"==================================
 " set t_Co=8 " 256 colors with tmux
 set t_Co=24 " 16million colors with tmux
 
