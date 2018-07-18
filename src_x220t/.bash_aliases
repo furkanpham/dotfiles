@@ -58,7 +58,10 @@ function gs-all() { # `git status` all my repos quickly
 }
 
 # music
-alias fix-mpd='sudo service mpd stop && mpd'
+function ncmpcpp() {
+    [[ ! -s "${HOME}/.config/mpd/pid" ]] && sudo service mpd stop && mpd
+    command ncmpcpp
+}
 
 # network
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
