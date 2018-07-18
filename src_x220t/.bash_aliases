@@ -87,3 +87,4 @@ fi
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
+function c() { echo "${@}" | bc; }
