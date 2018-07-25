@@ -78,6 +78,7 @@ alias mqaid='python3 ~/git/mqaid/is_mqa.py'
 # android debug bridge
 alias adb-battery='adb shell dumpsys battery'
 alias adb-log='adb logcat'
+alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 && ssh localhost -p 8022'
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
