@@ -2,7 +2,7 @@ command_not_found_handle() {
 	/data/data/com.termux/files/usr/libexec/termux/command-not-found "$1"
 }
 
-PS1='\$ '
+PS1='\w \$ '
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
