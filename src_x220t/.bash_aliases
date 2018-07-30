@@ -74,6 +74,7 @@ alias reset-dns='echo nameserver 127.0.1.1 | sudo tee /etc/resolv.conf'
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
 alias mqaid='python3 ~/git/mqaid/is_mqa.py'
+function rmexif() { exiftool -all= "${@}" && exiftool -delete_original! "${@}"; }
 
 # android debug bridge
 alias adb-battery='adb shell dumpsys battery'
