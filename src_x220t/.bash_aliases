@@ -74,7 +74,14 @@ alias reset-dns='echo nameserver 127.0.1.1 | sudo tee /etc/resolv.conf'
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
 alias mqaid='python3 ~/git/mqaid/is_mqa.py'
-function rmexif() { exiftool -all= "${@}" && mkdir -p /tmp/exif-original; for f in "${@}"; mv "${f}"_original /tmp/exif-original/"${f}"_original; done; }
+function rmexif() {
+    dir=/tmp/exif-original
+    [[ ! -d "${dir}" ]] && mkdir -p "${dir}"
+    exiftool -all= "${@}"
+    for f in "${@}"; do
+        [[ -f "${f}"_original ]] && mv {,"${dir}"/}"${f}"_original
+    done
+}
 
 # android debug bridge
 alias adb-battery='adb shell dumpsys battery'
