@@ -9,6 +9,8 @@ alias ..5='cd ../../../../..'
 alias ..6='cd ../../../../../..'
 
 # shortcuts
+alias tm='tmux'
+alias ta='tmux attach'
 alias x='exit'
 alias o='xdg-open'
 alias v='vim'
