@@ -92,3 +92,4 @@ alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 &&
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
 function bkp() { for f in "${@}"; do [[ -f "${f}" ]] && cp "${f}"{,_backup}; done; }
+function bkp-restore() { for f in "${@}"; do [[ -f "${f}" ]] && mv -f "${f}"{_backup,}; done; }
