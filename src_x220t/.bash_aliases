@@ -92,5 +92,5 @@ alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 &&
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
-function c() { echo "${@}" | bc; }
+function c() { bc -l <<< "${@}" | sed '/\./ s/\.\{0,1\}0\{1,\}$//'; }
 function bkp() { for f in "${@}"; do [[ -f "${f}" ]] && cp "${f}"{,_backup}; done; }
