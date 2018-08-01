@@ -42,8 +42,8 @@ alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
-alias keil='VBoxManage startvm "Keil" --type gui'
-alias proteus='VBoxManage startvm "Proteus" --type gui'
+alias keil='{ vboxmanage showvminfo "Keil" | grep -q "running (since"; } || VBoxManage startvm "Keil" --type gui'
+alias proteus='{ vboxmanage showvminfo "Proteus" | grep -q "running (since"; } || VBoxManage startvm "Proteus" --type gui'
 
 # git
 alias gs='git status'
