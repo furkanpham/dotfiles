@@ -16,14 +16,12 @@ alias v='vim'
 alias sv='sudo vim'
 alias m='mpv'
 alias diff='colordiff'
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
 alias hgrep='history | grep'
 function mdd() { mkdir -p "$1"; cd "$1"; }
+function c() { bc -l <<< "${@}" | sed '/\./ s/\.\{0,1\}0\{1,\}$//'; }
 
 # default options
+alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -32,6 +30,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias mkdir='mkdir -v'
 alias wget='wget -c'
+alias grep='grep --color=auto'
 
 # wine shortcuts
 alias word='playonlinux --run "Microsoft Word 2010"'
@@ -92,5 +91,4 @@ alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 &&
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
-function c() { bc -l <<< "${@}" | sed '/\./ s/\.\{0,1\}0\{1,\}$//'; }
 function bkp() { for f in "${@}"; do [[ -f "${f}" ]] && cp "${f}"{,_backup}; done; }
