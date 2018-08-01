@@ -16,9 +16,9 @@ alias v='vim'
 alias sv='sudo vim'
 alias m='mpv'
 alias diff='colordiff'
-alias hgrep='history | grep'
+function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1"; }
-function c() { bc -l <<< "${@}" | sed '/\./ s/\.\{0,1\}0\{1,\}$//'; }
+function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
 
 # default options
 alias ls='ls --color=auto'
@@ -41,8 +41,8 @@ alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
-alias keil='{ vboxmanage showvminfo "Keil" | grep -q "running (since"; } || VBoxManage startvm "Keil" --type gui'
-alias proteus='{ vboxmanage showvminfo "Proteus" | grep -q "running (since"; } || VBoxManage startvm "Proteus" --type gui'
+alias keil='{ grep -q "running (since" <(vboxmanage showvminfo "Keil"); } || VBoxManage startvm "Keil" --type gui'
+alias proteus='{ grep -q "running (since" <(vboxmanage showvminfo "Proteus"); } || VBoxManage startvm "Proteus" --type gui'
 
 # git
 alias gs='git status'
