@@ -8,6 +8,7 @@ alias cd..5='cd ../../../../..'
 alias cd..6='cd ../../../../../..'
 
 # shortcuts
+alias sudo='sudo '
 alias tm='tmux -2'
 alias ta='tmux attach'
 alias x='exit'
@@ -19,9 +20,10 @@ alias diff='colordiff'
 function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1"; }
 function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
+function duu() { sort -k 1,1hr -k 2,2f <(du -h -d 1 "${@}"); }
 
 # default options
-alias ls='ls --color=auto'
+alias ls='ls --color=auto --group-directories-first'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -31,12 +33,14 @@ alias mv='mv -i'
 alias mkdir='mkdir -v'
 alias wget='wget -c'
 alias grep='grep --color=auto'
+alias lsblk='lsblk -o NAME,TYPE,FSTYPE,LABEL,UUID,SIZE,MOUNTPOINT'
 
 # wine shortcuts
 alias word='playonlinux --run "Microsoft Word 2010"'
 alias excel='playonlinux --run "Microsoft Excel 2010"'
 alias powerpoint='playonlinux --run "Microsoft Powerpoint 2010"'
 alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
+alias tos='WINEPREFIX="${HOME}/.PlayOnLinux/wineprefix/Steam" WINEDEBUG="-all" wine "${HOME}/.PlayOnLinux/wineprefix/Steam/drive_c/Program Files/Steam/steamapps/common/Town of Salem/TownOfSalem.exe"'
 
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
@@ -60,7 +64,7 @@ function gs-all() { # `git status` all my repos quickly
 
 # music
 function ncmpcpp() {
-    [[ ! -s "${HOME}/.config/mpd/pid" ]] && sudo service mpd stop && mpd
+    [[ ! -s "${HOME}/.config/mpd/pid" ]] && { sudo service mpd stop && mpd; }
     command ncmpcpp
 }
 
@@ -77,10 +81,10 @@ alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDIN
 alias mqaid='python3 ~/git/mqaid/is_mqa.py'
 function rmexif() {
     dir=/tmp/exif-original
-    [[ ! -d "${dir}" ]] && mkdir -p "${dir}"
+    [[ -d "${dir}" ]] || command mkdir -p "${dir}"
     exiftool -all= "${@}"
-    for f in "${@}"; do
-        [[ -f "${f}"_original ]] && mv {,"${dir}"/}"${f}"_original
+    for f do
+        [[ -f "${f}"_original ]] && mv -- {,"${dir}"/}"${f}"_original
     done
 }
 
@@ -91,5 +95,9 @@ alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 &&
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
-function bkp() { for f in "${@}"; do [[ -f "${f}" ]] && cp "${f}"{,_backup}; done; }
-function bkp-restore() { for f in "${@}"; do [[ -f "${f}" ]] && mv -f "${f}"{_backup,}; done; }
+function bkp() { for f do cp -- "${f}"{,_backup}; done; }
+function unbkp() {
+    for f do
+        [[ "${f}" == *_backup ]] && mv -- "${f}" "${f%_backup}" || mv -- "${f}"{_backup,}
+    done
+}
