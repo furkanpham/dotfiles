@@ -93,6 +93,19 @@ function rmexif() {
 alias adb-battery='adb shell dumpsys battery'
 alias adb-log='adb logcat'
 alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 && ssh localhost -p 8022'
+function adb-dcim() {
+    if (( "$#" == 0 )); then
+        declare -a  files
+        while read -r; do
+            files+=( "${REPLY##* }" )
+        done < <(adb ls /sdcard/DCIM/Camera)
+        column < <(printf "%s\n" "${files[@]}")
+    else
+        for f do
+            adb pull /sdcard/DCIM/Camera/"${f}"
+        done
+    fi
+}
 
 # misc
 alias fix-jtagd='pkill jtagd && killall jtagd'
