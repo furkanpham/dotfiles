@@ -1,0 +1,63 @@
+#!/bin/bash
+# <$1>: VM
+# [$2]: workspace
+
+# Abort if no arguments were given
+(( "$#" > 0 )) || { printf >&2 "usage: $(basename "${0}") <VM> [workspace]\n"; exit 1; }
+
+# Get list of VMs
+declare -a  vmlist
+while read -r; do
+    vm="${REPLY%% *}"
+    vm="${vm//\"}"
+    vmlist+=( "${vm}" )
+done < <(VBoxManage list vms)
+
+# Check if $1 is a valid VM
+declare     vm_to_run
+for v in "${vmlist[@]}"; do
+    [[ "${1}" == "${v}" ]] && { vm_to_run="${v}"; break; }
+done
+if [[ ! -n "${vm_to_run}" ]]; then
+    printf >&2 "%s: not a valid VM\n" "${1}"
+    printf >&2 "\n"
+    printf >&2 "Valid VMs are:\n"
+    printf >&2 "    %s\n" "${vmlist[*]}"
+    exit 1
+fi
+
+# If $2 was passed, check if $2 is a valid workspace
+declare -i  desk_to_switch
+if (( "$#" > 1 )); then
+    declare -a  desklist
+
+    # Check if $2 is a number
+    regex="^-?[0-9]+$"
+    [[ "${2}" =~ $regex ]] || { printf >&2 "%s: not a number\n" "${2}"; exit 1; }
+
+    # Check if $2 is a valid workspace
+    while read -r; do
+        desklist+=( "${REPLY}" )
+    done < <(wmctrl -d)
+    if (( "${2}" >= "${#desklist[@]}" )); then
+        printf >&2 "%s: no such workspace\n" "${2}"
+        exit 1
+    fi
+    desk_to_switch="${2}"
+fi
+
+# Start vm
+VBoxManage startvm "${vm_to_run}" --type gui &
+
+# Exit script if window switching is not necessary
+[[ -n "${desk_to_switch}" ]] || exit 0
+
+declare     windowid
+sleep 1
+windowid="$(grep -E "${vm_to_run} .* - Oracle VM VirtualBox$" <(wmctrl -l))"
+windowid="${windowid%%* }"
+
+# Place VM in specified workspace
+wmctrl -ir "${windowid}" -t "${desk_to_switch}"
+
+exit 0

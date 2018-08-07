@@ -46,8 +46,8 @@ alias tos='WINEPREFIX="${HOME}/.PlayOnLinux/wineprefix/Steam" WINEDEBUG="-all" w
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
-alias keil='{ grep -q "running (since" <(vboxmanage showvminfo "Keil"); } || VBoxManage startvm "Keil" --type gui'
-alias proteus='{ grep -q "running (since" <(vboxmanage showvminfo "Proteus"); } || VBoxManage startvm "Proteus" --type gui'
+alias keil='startvm Keil 1'
+alias proteus='startvm Proteus 2'
 
 # git
 alias gs='git status'
