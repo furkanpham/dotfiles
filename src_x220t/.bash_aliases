@@ -34,6 +34,7 @@ alias mkdir='mkdir -v'
 alias wget='wget -c'
 alias grep='grep --color=auto'
 alias lsblk='lsblk -o NAME,TYPE,FSTYPE,LABEL,UUID,SIZE,MOUNTPOINT'
+alias ncdu='ncdu -r'
 
 # wine shortcuts
 alias word='playonlinux --run "Microsoft Word 2010"'
