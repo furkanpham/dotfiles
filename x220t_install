@@ -21,7 +21,9 @@ files=(
     .config/mpdnotify.conf
     .config/mpd/mpd.conf
     .config/mpv/mpv.conf
+    bin/listppa
     bin/startvm
+    bin/unarchive
 )
 
 #-------------------------------------------------------------------------------
