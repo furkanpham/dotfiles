@@ -7,10 +7,8 @@
 
 # Get list of VMs
 declare -a  vmlist
-while read -r; do
-    vm="${REPLY%% *}"
-    vm="${vm//\"}"
-    vmlist+=( "${vm}" )
+while read -r vm _; do
+    vmlist+=( "${vm//\"}" )
 done < <(VBoxManage list vms)
 
 # Check if $1 is a valid VM
@@ -52,12 +50,10 @@ VBoxManage startvm "${vm_to_run}" --type gui &
 # Exit script if window switching is not necessary
 [[ -n "${desk_to_switch}" ]] || exit 0
 
-declare     windowid
 sleep 1
-windowid="$(grep -E "${vm_to_run} .* - Oracle VM VirtualBox$" <(wmctrl -l))"
-windowid="${windowid%%* }"
 
 # Place VM in specified workspace
+read -r windowid _ < <(grep -E "${vm_to_run} .* - Oracle VM VirtualBox$" <(wmctrl -l))
 wmctrl -ir "${windowid}" -t "${desk_to_switch}"
 
 exit 0
