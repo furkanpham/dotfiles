@@ -1,4 +1,3 @@
 #!/bin/bash
 # Used in PS1 to display error code of last executed command
-(( "$1" == 0 )) && printf '\033[0;32m' || printf '\033[1;31m'
-printf '%d\033[0m' $1
+(( "$1" != 0 )) && printf '%d ' $1
