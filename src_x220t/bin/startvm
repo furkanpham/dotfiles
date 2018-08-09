@@ -7,8 +7,8 @@
 
 # Get list of VMs
 declare -a  vmlist
-while read -r vm _; do
-    vmlist+=( "${vm//\"}" )
+while IFS=\" read -r _ vm _; do
+    vmlist+=( "${vm}" )
 done < <(VBoxManage list vms)
 
 # Check if $1 is a valid VM
