@@ -8,12 +8,13 @@ files=(
     .vimrc
     .bashrc
     .bash_aliases
+    .bash_profile
     .dircolors
     .inputrc
-    .profile
     .tmux.conf
     .tmux-gitbar.conf
     .XCompose
+    .xprofile
     .ncmpcpp/bindings
     .ncmpcpp/config
     .config/compton.conf
@@ -21,6 +22,7 @@ files=(
     .config/mpdnotify.conf
     .config/mpd/mpd.conf
     .config/mpv/mpv.conf
+    bin/errcode
     bin/listppa
     bin/startvm
     bin/unarchive

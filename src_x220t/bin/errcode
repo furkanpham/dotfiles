@@ -1,0 +1,4 @@
+#!/bin/bash
+# Used in PS1 to display error code of last executed command
+(( "$1" == 0 )) && printf '\033[1;32m' || printf '\033[1;31m'
+printf '%3d\033[0m' $1
