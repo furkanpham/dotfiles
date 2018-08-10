@@ -13,7 +13,7 @@ HISTCONTROL=ignoreboth
 HISTFILESIZE=120000
 HISTSIZE=10000
 HISTIGNORE=ls:l:ll
-PS1='\[\033[1;31m\]$(errcode $?)\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='\[\033[1;31m\]$(x=$?;(( $x != 0 ))&&printf "$x ")\[\033[1;32m\]\u@\h\[\033[00m\]:\[\033[1;34m\]\w\[\033[00m\]\$ '
 
 # Aliases
 [[ -f ${HOME}/.bash_aliases ]] && . ${HOME}/.bash_aliases
