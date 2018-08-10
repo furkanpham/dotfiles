@@ -1,0 +1,96 @@
+#!/bin/bash
+# Check FLAC files for metadata that may be missing
+
+set -o errexit
+set -o pipefail
+
+myname="$(basename "$0")"
+
+reset=$'\033[0m'
+red=$'\033[1;31m'
+green=$'\033[1;32m'
+yellow=$'\033[1;33m'
+
+declare -g  current_dir
+
+#-------------------------------------------------------------------------------
+# Functions
+
+_usage() { printf >&2 "usage: %s target...\n" "${myname}"; exit 1; }
+
+_collect_files() {
+    while [[ "$1" != "" ]]; do
+        # If target is a directory
+        if [[ -d "$1" ]]; then
+            dir=${1%/}      # Remove trailing /, if any
+
+            # Go one level deeper if directory is not empty
+            [[ $(shopt -s nullglob dotglob; echo "${dir}"/*) ]] && _collect_files "${dir}"/*
+
+            shift
+            continue
+        fi
+
+        # If target is a file
+        if [[ -f "$1" ]]; then
+            if [[ ${1##*.} == "flac" ]]; then
+                if [[ "${1%/*}" != "${current_dir}" ]]; then
+                    current_dir="${1%/*}"
+                    printf "%s\n" "${current_dir}"
+                fi
+                _tag_check "${1}"
+            fi
+
+            shift
+            continue
+        fi
+
+        # Abort if target is not a file/directory
+        printf >&2 "%s: cannot access '%s': No such file or directory\n" "${myname}" "$1"
+        exit 1
+    done
+}
+
+_tag_check() {
+    declare -A  metadata
+    declare     buff
+
+    buff="> ${1##*/}: "
+
+    # Collect tags
+    while read -r; do
+        case "${REPLY,,}" in
+            'tracknumber='*) metadata["tracknumber"]=1 ;;
+            'title='*) metadata["title"]=1 ;;
+            'artist='*) metadata["artist"]=1 ;;
+            'album='*) metadata["album"]=1 ;;
+            'date='*) metadata["date"]=1 ;;
+            'albumartist='*|'album artist='*) metadata["albumartist"]=1 ;;
+        esac
+    done < <(metaflac --export-tags-to=- "${1}")
+
+    if (( "${#metadata[@]}" == 6 )); then
+        buff+="${green}ok"
+    else
+        buff+="missing"
+        [[ " ${!metadata[@]} " != *"tracknumber"* ]] && buff+="${red} tracknumber"
+        [[ " ${!metadata[@]} " != *"title"* ]] && buff+="${red} title"
+        [[ " ${!metadata[@]} " != *"artist"* ]] && buff+="${red} artist"
+        [[ " ${!metadata[@]} " != *"album"* ]] && buff+="${red} album"
+        [[ " ${!metadata[@]} " != *"date"* ]] && buff+="${yellow} date"
+        [[ " ${!metadata[@]} " != *"albumartist"* ]] && buff+="${yellow} albumartist"
+    fi
+    buff+="${reset}"
+
+    printf "%s\n" "${buff}"
+}
+
+#-------------------------------------------------------------------------------
+# Start script
+
+# Abort if no argument is given
+(( $# > 0 )) || _usage
+
+# Process all FLACs
+printf "Scanning files\n"
+_collect_files "${@}"

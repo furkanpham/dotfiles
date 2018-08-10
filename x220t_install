@@ -26,6 +26,7 @@ files=(
     bin/listppa
     bin/startvm
     bin/unarchive
+    bin/tag-check
 )
 
 #-------------------------------------------------------------------------------
