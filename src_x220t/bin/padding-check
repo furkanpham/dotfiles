@@ -1,0 +1,81 @@
+#!/bin/bash
+# Check for ID3 tags, PICTURE and PADDING block sizes in FLACs
+#
+#   usage: padding-check [PATH]...
+#
+# PATH can be a directory or file, multiple PATHs are possible
+# padding-check will search in current directory if PATH is not given
+
+myname="$(basename "${0}")"
+
+_print_row() { for ((i=0; i<${1}; i++)); do printf "${2}"; done; printf '\n'; }
+
+_collect_files() {
+    while [[ "$1" != "" ]]; do
+        # If target is a directory
+        if [[ -d "$1" ]]; then
+            dir=${1%/}      # Remove trailing /, if any
+
+            # Go one level deeper if directory is not empty
+            [[ $(shopt -s nullglob dotglob; echo "${dir}"/*) ]] && _collect_files "${dir}"/*
+
+            shift
+            continue
+        fi
+
+        # If target is a file
+        if [[ -f "$1" ]]; then
+            if [[ ${1##*.} == "flac" ]]; then
+                if [[ "${1%/*}" != "${current_dir}" ]]; then
+                    current_dir="${1%/*}"
+                    _print_row 36 -
+                    printf "%s\n" "${current_dir}"
+                fi
+                _print_row 18 -
+                _data_check "${1}"
+            fi
+
+            shift
+            continue
+        fi
+
+        # Abort if target is not a file/directory
+        printf >&2 "%s: cannot access '%s': No such file or directory\n" "${myname}" "$1"
+        exit 1
+    done
+}
+
+_data_check() {
+    # Print filename and size
+    printf "> %s (%0.1f MB)\n" "${1##*/}" "$(bc -l <<< "$(stat --printf="%s" "${1}")/1049000")"
+
+    # Check if ID3 tags exist
+    [[ "$(file "${1}")" == *ID3* ]] && printf "  ID3 tags\n"
+
+    # Get image data, if it exists
+    declare -A  image
+    while read -r; do
+        if (( "${#image[@]}" == 3 )); then
+            printf "    Picture (%d x %d) %0.1f KiB\n" "${image[width]}" "${image[height]}" "$(bc -l <<< "${image[datalength]}/1024")"
+            break
+        fi
+        IFS=: read -r key value _ <<< "${REPLY}"
+        case "${key// }" in
+            'width'|'height'|'datalength') image["${key// }"]="${value}" ;;
+        esac
+    done < <(metaflac --list --block-type PICTURE "${1}")
+    (( "${#image[@]}" == 3 )) || printf "    No pictures found\n"
+
+    # Get padding data, if it exists
+    while read -r key value _; do
+        if [[ "${key}" == "length:" ]]; then
+            padding="$(bc -l <<< "${value}/1024")"
+            printf "    Padding block: %0.1f KiB\n" "${padding}"
+            break
+        fi
+    done < <(metaflac --list --block-type PADDING "${1}")
+    [[ -n "${padding}" ]] || printf "    No padding found\n"
+}
+
+(( "$#" == 0 )) && _collect_files . || _collect_files "${@}"
+_print_row 36 -
