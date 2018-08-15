@@ -58,14 +58,11 @@ _tag_check() {
     buff="> ${1##*/}: "
 
     # Collect tags
-    while read -r; do
-        case "${REPLY,,}" in
-            'tracknumber='*) metadata["tracknumber"]=1 ;;
-            'title='*) metadata["title"]=1 ;;
-            'artist='*) metadata["artist"]=1 ;;
-            'album='*) metadata["album"]=1 ;;
-            'date='*) metadata["date"]=1 ;;
-            'albumartist='*|'album artist='*) metadata["albumartist"]=1 ;;
+    while IFS=\= read -r tag _; do
+        tag="${tag,,}"
+        tag="${tag// }"
+        case "${tag}" in
+            'tracknumber'|'title'|'artist'|'album'|'date'|'albumartist') metadata["${tag}"]=1 ;;
         esac
     done < <(metaflac --export-tags-to=- "${1}")
 
