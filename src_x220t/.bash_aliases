@@ -48,7 +48,17 @@ alias tos='WINEPREFIX="${HOME}/.PlayOnLinux/wineprefix/Steam" WINEDEBUG="-all" w
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
 alias keil='startvm Keil 1'
-alias proteus='startvm Proteus 2'
+function proteus() {
+    hdd_uuid="fe740011-7d33-4985-9ab9-2f03904126c3"
+    while read -r uuid mountpoint; do
+        if [[ "${uuid}" == "${hdd_uuid}" ]]; then
+            [[ "${mountpoint}" == '' ]] && sudo mount UUID="${hdd_uuid}" /media/pham/Pham
+            break
+        fi
+    done < <(lsblk -o UUID,MOUNTPOINT)
+    sleep 0.5
+    startvm Proteus 2
+}
 
 # git
 alias gs='git status'
