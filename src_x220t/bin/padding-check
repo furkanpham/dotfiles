@@ -6,41 +6,43 @@
 # PATH can be a directory or file, multiple PATHs are possible
 # padding-check will search in current directory if PATH is not given
 
+set -o errexit
+set -o pipefail
+
+shopt -s nullglob
+shopt -s dotglob
+
 myname="$(basename "${0}")"
 
-_print_row() { for ((i=0; i<${1}; i++)); do printf "${2}"; done; printf '\n'; }
+#-------------------------------------------------------------------------------
+# Functions
 
 _collect_files() {
-    while [[ "$1" != "" ]]; do
-        # If target is a directory
-        if [[ -d "$1" ]]; then
-            dir=${1%/}      # Remove trailing /, if any
+    for arg do
+        arg="$(realpath "${arg%/}")"
 
-            # Go one level deeper if directory is not empty
-            [[ $(shopt -s nullglob dotglob; echo "${dir}"/*) ]] && _collect_files "${dir}"/*
-
-            shift
+        if [[ -d "${arg}" ]]; then
+            for i in "${arg}"/*; do
+                _collect_files "${i}"
+            done
             continue
         fi
 
-        # If target is a file
-        if [[ -f "$1" ]]; then
-            if [[ ${1##*.} == "flac" ]]; then
-                if [[ "${1%/*}" != "${current_dir}" ]]; then
-                    current_dir="${1%/*}"
-                    _print_row 36 -
+        if [[ -f "${arg}" ]]; then
+            # Only check file if it has .flac extension
+            if [[ "${arg}" == *.flac ]]; then
+                # Print current dir if it has changed
+                if [[ "${arg%/*}" != "${current_dir}" ]]; then
+                    current_dir="${arg%/*}"
                     printf "%s\n" "${current_dir}"
                 fi
-                _print_row 18 -
-                _data_check "${1}"
+                _data_check "${arg}"
             fi
-
-            shift
             continue
         fi
 
-        # Abort if target is not a file/directory
-        printf >&2 "%s: cannot access '%s': No such file or directory\n" "${myname}" "$1"
+        # Abort if given argument is not a file/directory
+        printf >&2 "%s: cannot access '%s': No such file/directory\n" "${myname}" "${i}"
         exit 1
     done
 }
@@ -77,5 +79,7 @@ _data_check() {
     [[ -n "${padding}" ]] || printf "    No padding found\n"
 }
 
+#-------------------------------------------------------------------------------
+# Start script
+
 (( "$#" == 0 )) && _collect_files . || _collect_files "${@}"
-_print_row 36 -

@@ -1,31 +1,24 @@
 #!/bin/bash
 
+shopt -s nullglob
+shopt -s dotglob
+
 _show_ppa() {
     while IFS=/ read -r _ _ _ id pkg; do
-        printf "sudo apt-add-repository ppa:%s/%s\n" "${id}" "${pkg}"
+        printf "ppa:%s/%s\n" "${id}" "${pkg}"
     done < <(grep -o "^deb http://ppa.launchpad.net/[a-z0-9\-]\+/[a-z0-9\-]\+" "${1}")
 }
 
 _get_list() {
-    declare     target
-
-    while [[ "${1}" != "" ]]; do
-        target="$(realpath "${1}")"
-
-        # If $1 is dir, execute _get_list recursively in files of $1
-        if [[ -d "${target}" ]]; then
-            target="${target%/}"
-            [[ $(shopt -s nullglob dotglob; echo "${target}"/*) ]] && _get_list "${target}"/*
-            shift
-            continue
-        fi
-
-        # Show ppa if $1 is file.list
-        if [[ -f "${target}" ]]; then
-            [[ "${target}" == *.list ]] && _show_ppa "${target}"
-            shift
-            continue
-        fi
+    for arg do
+        arg="$(realpath "${arg%/}")"
+        for i in "${arg}"/*; do
+            if [[ -d "${i}" ]]; then
+                _get_list "${i}"
+            elif [[ -f "${i}" ]] && [[ "${i}" == *.list ]]; then
+                _show_ppa "${i}"
+            fi
+        done
     done
 }
 

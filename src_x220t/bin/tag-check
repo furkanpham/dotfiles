@@ -4,6 +4,9 @@
 set -o errexit
 set -o pipefail
 
+shopt -s nullglob
+shopt -s dotglob
+
 myname="$(basename "$0")"
 
 reset=$'\033[0m'
@@ -19,34 +22,32 @@ declare -g  current_dir
 _usage() { printf >&2 "usage: %s target...\n" "${myname}"; exit 1; }
 
 _collect_files() {
-    while [[ "$1" != "" ]]; do
-        # If target is a directory
-        if [[ -d "$1" ]]; then
-            dir=${1%/}      # Remove trailing /, if any
+    for arg do
+        arg="$(realpath "${arg%/}")"
 
-            # Go one level deeper if directory is not empty
-            [[ $(shopt -s nullglob dotglob; echo "${dir}"/*) ]] && _collect_files "${dir}"/*
-
-            shift
+        # If $arg is directory, check files inside it
+        if [[ -d "${arg}" ]]; then
+            for i in "${arg}"/*; do
+                _collect_files "${i}"
+            done
             continue
         fi
 
-        # If target is a file
-        if [[ -f "$1" ]]; then
-            if [[ ${1##*.} == "flac" ]]; then
-                if [[ "${1%/*}" != "${current_dir}" ]]; then
-                    current_dir="${1%/*}"
+        if [[ -f "${arg}" ]]; then
+            # Only check file if it has .flac extension
+            if [[ "${arg}" == *.flac ]]; then
+                # Print current dir if it has changed
+                if [[ "${arg%/*}" != "${current_dir}" ]]; then
+                    current_dir="${arg%/*}"
                     printf "%s\n" "${current_dir}"
                 fi
-                _tag_check "${1}"
+                _tag_check "${arg}"
             fi
-
-            shift
             continue
         fi
 
-        # Abort if target is not a file/directory
-        printf >&2 "%s: cannot access '%s': No such file or directory\n" "${myname}" "$1"
+        # Abort if given argument is not a file/directory
+        printf >&2 "%s: cannot access '%s': No such file/directory\n" "${myname}" "${i}"
         exit 1
     done
 }
