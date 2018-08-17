@@ -78,7 +78,7 @@ _unpack() {
 }
 
 # Show usage and abort if no arguments are passed
-(( "$#" == 0 )) && { _usage; exit 1 }
+(( "$#" == 0 )) && { _usage; exit 1; }
 
 # Unpack zipfiles
 for f do
@@ -86,6 +86,5 @@ for f do
         _unpack "${f}"
     else
         printf >&2 "%s: no such file\n" "${f}"
-        continue
     fi
 done
