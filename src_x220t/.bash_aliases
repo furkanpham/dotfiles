@@ -49,14 +49,9 @@ alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
 alias keil='startvm Keil 1'
 function proteus() {
-    hdd_uuid="fe740011-7d33-4985-9ab9-2f03904126c3"
-    while read -r uuid mountpoint; do
-        if [[ "${uuid}" == "${hdd_uuid}" ]]; then
-            [[ "${mountpoint}" == '' ]] && sudo mount UUID="${hdd_uuid}" /media/pham/Pham
-            break
-        fi
-    done < <(lsblk -o UUID,MOUNTPOINT)
-    sleep 0.5
+    vm_uuid="fe740011-7d33-4985-9ab9-2f03904126c3"
+    read -r name uuid mountpoint < <(lsblk -r -o NAME,UUID,MOUNTPOINT | grep "${vm_uuid}")
+    [[ "${mountpoint}" == "" ]] && /usr/bin/udisksctl mount -b /dev/${name}
     startvm Proteus 2
 }
 
