@@ -76,6 +76,9 @@ function gs-all() { # `git status` all my repos quickly
 
 # music
 function ncmpcpp() {
+    music_uuid="4B87239B3A469779"
+    read -r name uuid mountpoint < <(lsblk -r -o NAME,UUID,MOUNTPOINT | grep "${music_uuid}")
+    [[ "${mountpoint}" == "" ]] && /usr/bin/udisksctl mount -b /dev/${name}
     [[ ! -s "${HOME}/.config/mpd/pid" ]] && { sudo service mpd stop && mpd; }
     command ncmpcpp
 }
