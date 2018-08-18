@@ -91,6 +91,26 @@ alias reset-dns='sudo tee /etc/resolv.conf <<< "nameserver 127.0.1.1"'
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
 alias mqaid='python3 ~/git/mqaid/is_mqa.py'
+function show-tag() {
+    if (( "$#" == 0 )); then
+        for f in *.flac; do
+            printf "\n"
+            metaflac --export-tags-to=- --no-filename "${f}"
+        done
+    else
+        cmd="metaflac"
+        for tag do
+            cmd+=" --show-tag="${tag}""
+        done
+        cmd+=" --no-filename"
+        for f in *.flac; do
+            while read -r; do
+                printf "%s " "${REPLY#*=}"
+            done < <(eval "${cmd}" "\"${f}\"")
+            printf "\n"
+        done
+    fi
+}
 function rmexif() {
     dir=/tmp/exif-original
     [[ -d "${dir}" ]] || command mkdir -p "${dir}"
