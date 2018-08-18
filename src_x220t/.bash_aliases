@@ -17,7 +17,6 @@ alias v='vim'
 alias sv='sudo vim'
 alias m='mpv'
 alias diff='colordiff'
-alias lsvm='vboxmanage list vms'
 function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1"; }
 function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
@@ -47,6 +46,9 @@ alias tos='WINEPREFIX="${HOME}/.PlayOnLinux/wineprefix/Steam" WINEDEBUG="-all" w
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
+
+# virtual machines
+alias lsvm='vboxmanage list vms'
 alias keil='startvm Keil 1'
 function proteus() {
     vm_uuid="fe740011-7d33-4985-9ab9-2f03904126c3"
