@@ -85,8 +85,8 @@ alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias wifi-channels='sudo iwlist wlp3s0 scan | grep \(Channel'
 alias fix-wifi='sudo systemctl restart network-manager.service'
 alias fix-wifi-2='sudo service network-manager stop && sleep 7 && sudo service network-manager start'
-alias fix-dns='echo nameserver 84.200.69.80 | sudo tee /etc/resolv.conf'
-alias reset-dns='echo nameserver 127.0.1.1 | sudo tee /etc/resolv.conf'
+alias fix-dns='sudo tee /etc/resolv.conf <<< "nameserver 84.200.69.80"'
+alias reset-dns='sudo tee /etc/resolv.conf <<< "nameserver 127.0.1.1"'
 
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
