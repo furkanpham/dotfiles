@@ -5,6 +5,8 @@
 
 dir="${HOME}/git/dotfiles/src_x220t"
 files=(
+    .gitconfig
+    .gitignore_global
     .vimrc
     .bashrc
     .bash_aliases
