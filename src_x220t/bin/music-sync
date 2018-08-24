@@ -18,7 +18,7 @@ jobs > "${temp_file}"
 exit
 EOF
 
-    lookup="mirror --dereference --parallel=5 --delete-first "${remote_dir}" "${local_dir}""
+    lookup="mirror --dereference --parallel=5 --delete-first ${remote_dir} ${local_dir}"
     while read -r; do
         if [[ "${REPLY}" == *"${lookup}"* ]]; then
             cat >&2 "${temp_file}"

@@ -3,7 +3,7 @@
 # [$2]: workspace
 
 # Abort if no arguments were given
-(( "$#" > 0 )) || { printf >&2 "usage: $(basename "${0}") <VM> [workspace]\n"; exit 1; }
+(( "$#" > 0 )) || { printf >&2 "usage: %s <VM> [workspace]\n" "$(basename "${0}")"; exit 1; }
 
 # Get list of VMs
 declare -a  vmlist
