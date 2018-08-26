@@ -1,0 +1,7 @@
+include "/usr/share/X11/locale/en_US.UTF-8/Compose"
+
+# GREEK
+<Multi_key> <o> <h> <m>      : "Ω"   U03A9    # GREEK CAPITAL LETTER OMEGA
+<Multi_key> <r> <h> <o>      : "ρ"   U03C1    # GREEK SMALL LETTER RHO
+<Multi_key> <p> <i>          : "π"   U03C0    # GREEK SMALL LETTER PI
+<Multi_key> <period> <minus> : "⋅"   U22C5    # DOT OPERATOR

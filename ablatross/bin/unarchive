@@ -1,0 +1,90 @@
+#!/bin/bash
+
+myname=$(basename "$0")
+
+_usage() {
+    cat << EOF >&2
+usage: ${myname} [ZIPFILE]...
+
+.tar.gz & .tgz
+  tar -xzf file.tar.gz
+.tar.bz2 & .tbz2
+  tar -xjf file.tar.bz2
+.tar.xz
+  tar -xJf file.tar.xz
+.gz & .Z
+  gunzip -c file.gz > file
+.rar
+  unrar x file.rar
+.tar
+  tar -xf file.tar
+.zip
+  unzip filen.zip
+.7z
+  7z x file.7z
+.jar
+  fastjar xf file.jar
+.iso
+  7z x file.iso
+EOF
+}
+
+_unpack() {
+    case "${1}" in
+        *.tar.gz | *.tgz)
+            printf 'tar -xzf %s\n' "${1}"
+            tar -xzf "${1}"
+            ;;
+        *.tar.bz2 | *.tbz2)
+            printf 'tar -xjf %s\n' "${1}"
+            tar -xjf "${1}"
+            ;;
+        *.tar.xz)
+            printf 'tar -xJf %s\n' "${1}"
+            tar -xJf "${1}"
+            ;;
+        *.gz)
+            printf 'gunzip -c %s > %s\n' "${1}" "${1%.gz}"
+            gunzip -c "${1}" > "${1%.gz}"
+            ;;
+        *.Z)
+            printf 'gunzip -c %s > %s\n}' "${1}" "${1%.Z}"
+            gunzip -c "${1}" > "${1%.Z}"
+            ;;
+        *.rar)
+            printf 'unrar x %s\n' "${1}"
+            unrar x "${1}"
+            ;;
+        *.tar)
+            printf 'tar -xf %s\n' "${1}"
+            tar -xf "${1}"
+            ;;
+        *.zip)
+            printf 'unzip %s\n' "${1}"
+            unzip "${1}"
+            ;;
+        *.7z | *.iso)
+            printf '7z x %s\n' "${1}"
+            7z x "${1}"
+            ;;
+        *.jar)
+            printf 'fastjar xf %s\n' "${1}"
+            fastjar xf "${1}"
+            ;;
+        *)
+            printf '%s is not a supported archive file.\n' "${1}"
+            ;;
+    esac
+}
+
+# Show usage and abort if no arguments are passed
+(( "$#" == 0 )) && { _usage; exit 1; }
+
+# Unpack zipfiles
+for f do
+    if [[ -f "${f}" ]]; then
+        _unpack "${f}"
+    else
+        printf >&2 "%s: no such file\n" "${f}"
+    fi
+done

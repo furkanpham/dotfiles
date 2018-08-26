@@ -1,0 +1,70 @@
+#!/bin/bash
+
+dir="${HOME}/git/dotfiles/ablatross"
+bkp="${dir}_backup"
+ablatross_files=(
+    .gitconfig
+    .gitignore_global
+    .vimrc
+    .bashrc
+    .bash_aliases
+    .bash_profile
+    .dircolors
+    .inputrc
+    .tmux.conf
+    .xprofile
+    .XCompose
+    .ncmpcpp/bindings
+    .ncmpcpp/config
+    .config/compton.conf
+    .config/xfce4/terminal/terminalrc
+    .config/mpdnotify.conf
+    .config/mpd/mpd.conf
+    .config/mpv/mpv.conf
+    bin/listppa
+    bin/startvm
+    bin/unarchive
+    bin/padding-check
+    bin/tag-check
+    bin/music-sync
+)
+
+_create_symlink() {
+    subdir="${1%/*}"
+    printf "  %s: " "${1}"
+
+    # Create directory if it doesn't exist yet
+    if [[ "${1}" != "${subdir}" ]]; then
+        mkdir -p "${subdir}"
+    fi
+
+    # If file exists, create a backup first
+    if [[ -f "${HOME}/${1}" ]]; then
+        if [[ "${1}" != "${subdir}" ]]; then
+            mkdir -p "${bkp}/${subdir}"
+        fi
+        printf "backing up, "
+        cp -Lu -- "${HOME}/${1}" "${bkp}/${1}"
+    fi
+
+    # Link file
+    printf "linking, "
+    ln -sfn -- "${dir}/${1}" "${HOME}/${1}"
+    printf "ok.\n"
+}
+
+_main() {
+    # Change directory into dotfiles, if it exists
+    cd "${dir}" || { printf '%s: no such dir\n' "${dir}"; exit 1; }
+
+    # Create backup directory if it doesn't exist yet
+    [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
+
+    # Process all dotfiles
+    printf "Linking files...\n"
+    for file in "${ablatross_files[@]}"; do
+        _create_symlink "${file}"
+    done
+}
+
+_main
