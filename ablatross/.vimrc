@@ -54,9 +54,6 @@ nnoremap <s-tab> <c-w>W
 " Always show statusline
 set laststatus=2
 
-" Map 1 to first non-blank character instead of start of line
-map 0 ^
-
 " Linenumber options
 set number
 set relativenumber
