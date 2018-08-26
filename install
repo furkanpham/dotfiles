@@ -12,7 +12,6 @@ _decide_host() {
     # Use $1 or $HOSTNAME to decide what dotfiles to use
     if (( "${#}" != 0 )); then
         host="${1}"
-        return
     else
         case "${HOSTNAME}" in
             'ablatross'|'FP-X220t')
