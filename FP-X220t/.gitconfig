@@ -1,8 +1,0 @@
-[user]
-	name = Furkan Pham
-	email = furkanpham@users.noreply.github.com
-[core]
-	editor = vim
-	excludesfile = ~/.gitignore_global
-[credential]
-	helper = cache --timeout=3600

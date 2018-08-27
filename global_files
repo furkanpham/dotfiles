@@ -1,0 +1,16 @@
+.dircolors
+.XCompose
+.xprofile
+.config/compton.conf
+.config/mpdnotify.conf
+.config/mpv/mpv.conf
+.inputrc
+bin/listppa
+bin/startvm
+bin/unarchive
+bin/padding-check
+bin/tag-check
+bin/music-sync
+.ncmpcpp/bindings
+.gitignore_global
+.gitconfig

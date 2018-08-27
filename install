@@ -2,9 +2,23 @@
 set -o errexit
 set -o pipefail
 
+_set_paths() {
+    declare -g  dotfiles  dir  bkp
+
+    dotfiles="${root%/specific}/${1}_files"
+    case "${1}" in
+        "global") dir="${root}/${1}"
+                  bkp="${root}/${1}_backup"
+                  ;;
+        *)        dir="${root}/specific/${1}"
+                  bkp="${root}/specific/${1}_backup"
+                  [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
+                  ;;
+    esac
+}
+
 _decide_host() {
-    declare -g  dir  bkp  dotfiles
-    declare     host
+    declare -g  host
     declare -a  hosts
 
     hosts=( ablatross FP-X220t termux )
@@ -28,11 +42,7 @@ _decide_host() {
     # Set up files/dirs to use
     for h in "${hosts[@]}"; do
         if [[ "${h}" == "${host}" ]]; then
-            dir="${root}/${host}"
-            bkp="${root}/${host}_backup"
-            [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
-            dotfiles="${root}/${host}_files"
-            printf "Using: %s\n" "${dir}"
+            _set_paths "${host}"
             return 0
         fi
     done
@@ -77,17 +87,24 @@ _main() {
         cd "${root}" || { printf '%s: no such dir\n' "${root}"; exit 1; }
     fi
 
-    # Decide which dotfiles to use
+    # Process all specific dotfiles
     if (( "${#}" == 0 ))
     then _decide_host
     else _decide_host "${1}"
     fi
-
-    # Process all dotfiles
-    printf "Linking files...\n"
+    printf "Setting up %s dotfiles\n" "${host}"
     while read -r; do
         _create_symlink "${REPLY}"
     done < "${dotfiles}"
+
+    # Process all global dotfiles
+    if [[ "${host}" != "termux" ]]; then
+        _set_paths "global"
+        printf "Setting up global dotfiles\n"
+        while read -r; do
+            _create_symlink "${REPLY}"
+        done < "${dotfiles}"
+    fi
 }
 
 _main "${@}"
