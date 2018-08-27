@@ -1,0 +1,26 @@
+#!/bin/bash
+
+shopt -s nullglob
+shopt -s dotglob
+
+_show_ppa() {
+    while IFS=/ read -r _ _ _ id pkg; do
+        printf "ppa:%s/%s\n" "${id}" "${pkg}"
+    done < <(grep -o "^deb http://ppa.launchpad.net/[a-z0-9\-]\+/[a-z0-9\-]\+" "${1}")
+}
+
+_get_list() {
+    for arg do
+        arg="$(realpath "${arg%/}")"
+        for i in "${arg}"/*; do
+            if [[ -d "${i}" ]]; then
+                _get_list "${i}"
+            elif [[ -f "${i}" ]] && [[ "${i}" == *.list ]]; then
+                _show_ppa "${i}"
+            fi
+        done
+    done
+}
+
+_get_list /etc/apt
+exit 0

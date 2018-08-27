@@ -1,0 +1,93 @@
+#!/bin/bash
+set -o errexit
+set -o pipefail
+
+_decide_host() {
+    declare -g  dir  bkp  dotfiles
+    declare     host
+    declare -a  hosts
+
+    hosts=( ablatross FP-X220t termux )
+
+    # Use $1 or $HOSTNAME to decide what dotfiles to use
+    if (( "${#}" != 0 )); then
+        host="${1}"
+    else
+        case "${HOSTNAME}" in
+            'ablatross'|'FP-X220t')
+                host="${HOSTNAME}"
+                ;;
+            'localhost')
+                if [[ "${OSTYPE}" == "linux-android" ]]; then
+                    host="termux"
+                fi
+                ;;
+        esac
+    fi
+
+    # Set up files/dirs to use
+    for h in "${hosts[@]}"; do
+        if [[ "${h}" == "${host}" ]]; then
+            dir="${root}/${host}"
+            bkp="${root}/${host}_backup"
+            [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
+            dotfiles="${root}/${host}_files"
+            printf "Using: %s\n" "${dir}"
+            return 0
+        fi
+    done
+
+    # If this part is reached, $1/$HOSTNAME does not exist in hosts
+    printf >&2 "No dotfiles available for %s\n" "${1}"
+    exit 1
+}
+
+_create_symlink() {
+    declare     subdir
+
+    subdir="${1%/*}"
+    printf "  %s: " "${1}"
+
+    # Create directory if it doesn't exist yet
+    if [[ "${1}" != "${subdir}" ]]; then
+        mkdir -p "${HOME}/${subdir}"
+    fi
+
+    # Backup file if it already exists and/or is newer than backup
+    if [[ -f "${HOME}/${1}" ]]; then
+        if [[ "${1}" != "${subdir}" ]]; then
+            mkdir -p "${bkp}/${subdir}"
+        fi
+        printf "backing up, "
+        cp -Lu -- "${HOME}/${1}" "${bkp}/${1}"
+    fi
+
+    # Link file
+    printf "linking, "
+    ln -sfn -- "${dir}/${1}" "${HOME}/${1}"
+    printf "ok.\n"
+}
+
+_main() {
+    declare -g  root
+    root="${HOME}/git/dotfiles"
+
+    # Change directory into dotfiles, if it exists
+    if [[ "${PWD}" != "${root}" ]]; then
+        cd "${root}" || { printf '%s: no such dir\n' "${root}"; exit 1; }
+    fi
+
+    # Decide which dotfiles to use
+    if (( "${#}" == 0 ))
+    then _decide_host
+    else _decide_host "${1}"
+    fi
+
+    # Process all dotfiles
+    printf "Linking files...\n"
+    while read -r; do
+        _create_symlink "${REPLY}"
+    done < "${dotfiles}"
+}
+
+_main "${@}"
