@@ -2,3 +2,4 @@
 .bashrc
 .bash_aliases
 .tmux.conf
+.inputrc
