@@ -17,6 +17,8 @@ alias v='vim'
 alias sv='sudo vim'
 alias m='mpv'
 alias diff='colordiff'
+alias dunmount='udisksctl unmount -b'
+alias deject='udisksctl power-off -b'
 function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1" || exit; }
 function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
