@@ -12,9 +12,9 @@ _set_paths() {
                   ;;
         *)        dir="${root}/specific/${1}"
                   bkp="${root}/specific/${1}_backup"
-                  [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
                   ;;
     esac
+    [[ -d "${bkp}" ]] || mkdir -p "${bkp}"
 }
 
 _decide_host() {
