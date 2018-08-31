@@ -5,3 +5,4 @@
 .config/mpd/mpd.conf
 .config/xfce4/terminal/terminalrc
 .ncmpcpp/config
+bin/photoshop

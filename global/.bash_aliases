@@ -38,13 +38,6 @@ alias grep='grep --color=auto'
 alias lsblk='lsblk -o NAME,TYPE,FSTYPE,LABEL,UUID,SIZE,MOUNTPOINT'
 alias ncdu='ncdu -r'
 
-# wine shortcuts
-alias word='playonlinux --run "Microsoft Word 2010"'
-alias excel='playonlinux --run "Microsoft Excel 2010"'
-alias powerpoint='playonlinux --run "Microsoft Powerpoint 2010"'
-alias photoshop='playonlinux --run "Adobe Photoshop CS6"'
-alias tos='WINEPREFIX="${HOME}/.PlayOnLinux/wineprefix/Steam" WINEDEBUG="-all" wine "${HOME}/.PlayOnLinux/wineprefix/Steam/drive_c/Program Files/Steam/steamapps/common/Town of Salem/TownOfSalem.exe"'
-
 # development
 alias gdbsuper='gdb --batch --ex run --ex bt --ex q --args'
 alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
