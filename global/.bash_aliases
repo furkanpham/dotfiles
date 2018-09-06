@@ -45,7 +45,12 @@ alias ruuvi-connect='JLinkExe -device nrf52 -if swd -speed 1000'
 # virtual machines
 alias lsvm='vboxmanage list vms'
 alias keil='startvm Keil 1'
-alias altium='startvm Altium 2'
+function altium() {
+    vm_uuid="4B87239B3A469779"
+    read -r name _ mountpoint < <(lsblk -rnpo NAME,UUID,MOUNTPOINT | grep "${vm_uuid}")
+    [[ "${mountpoint}" == "" ]] && /usr/bin/udisksctl mount -b "${name}"
+    startvm Altium 2
+}
 function proteus() {
     vm_uuid="fe740011-7d33-4985-9ab9-2f03904126c3"
     read -r name _ mountpoint < <(lsblk -rnpo NAME,UUID,MOUNTPOINT | grep "${vm_uuid}")
