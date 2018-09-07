@@ -1,0 +1,19 @@
+#!/bin/bash
+
+x=189
+y=0
+width=988
+height=741
+
+# Start NotITG
+WINEPREFIX="${HOME}/.wine_prefixes/notitg" wine "${HOME}/.wine_prefixes/notitg/drive_c/***REMOVED***/NotITG-V3-QuickStart/Program/NotITG-V3.exe" >/dev/null 2>&1 &
+
+# Get wmctrl window ID
+while [[ "${windowid}" == "" ]]; do
+    read -r windowid _ < <(grep -E "SIMPLY LOVE \(NITGV3\)$" <(wmctrl -l))
+    sleep 0.1
+done
+sleep 1
+
+# Resize NotITG window
+wmctrl -i -r "${windowid}" -e 0,$x,$y,$width,$height
