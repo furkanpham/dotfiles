@@ -31,7 +31,10 @@ EOF
     rm "${temp_file}"
 }
 
-# Abort if music library is not mounted
+# Mount music library is not mounted
+music_uuid="4B87239B3A469779"
+read -r name _ mountpoint < <(lsblk -rnpo NAME,UUID,MOUNTPOINT | grep "${music_uuid}")
+[[ "${mountpoint}" == "" ]] && /usr/bin/udisksctl mount -b "${name}"
 [[ -d "${local_dir}" ]] || { printf >&2 "Music library not mounted\n"; exit 1; }
 
 # Check if an lftp background process is already syncing music
