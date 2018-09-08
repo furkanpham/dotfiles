@@ -6,7 +6,7 @@ width=988
 height=741
 
 # Start NotITG
-WINEPREFIX="${HOME}/.wine_prefixes/notitg" wine "${HOME}/.wine_prefixes/notitg/drive_c/***REMOVED***/NotITG-V3-QuickStart/Program/NotITG-V3.exe" >/dev/null 2>&1 &
+WINEPREFIX="${HOME}/.wine_prefixes/notitg" wine "${HOME}/.wine_prefixes/notitg/drive_c/NotITG-V3-QuickStart/Program/NotITG-V3.exe" &
 
 # Get wmctrl window ID
 while [[ "${windowid}" == "" ]]; do
