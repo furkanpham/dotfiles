@@ -1,3 +1,3 @@
 #!/bin/bash
 exe='C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CS6.lnk'
-WINEPREFIX="${HOME}/.wine_prefixes/photoshop" wine start "${exe}"
+WINEPREFIX="${HOME}/wine/photoshop" wine start "${exe}"
