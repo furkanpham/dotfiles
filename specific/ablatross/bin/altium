@@ -1,0 +1,3 @@
+#!/bin/bash
+WINEPREFIX="${HOME}/wine/altium" \
+    wine "${HOME}/wine/altium/drive_c/Program Files/Altium/AD16/DXP.EXE"
