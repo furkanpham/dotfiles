@@ -91,7 +91,11 @@ alias reset-dns='sudo tee /etc/resolv.conf <<< "nameserver 127.0.1.1"'
 
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
-alias mqaid='python3 ~/git/mqaid/is_mqa.py'
+function mqaid() {
+    source "${HOME}/py-envs/env/bin/activate"
+    python3 "${HOME}/git/mqaid/is_mqa.py" "${@}"
+    deactivate
+}
 function show-tag() {
     if (( "$#" == 0 )); then
         for f in *.flac; do
