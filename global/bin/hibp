@@ -1,0 +1,30 @@
+#!/bin/bash
+# hibp - Look up and match passwords using haveibeenpwned's Pwned Password
+#        Repository.
+#
+# See https://haveibeenpwned.com/API/v2#PwnedPasswords for more information
+# about using haveibeenpwned's API.
+
+# Check if one argument was passed, abort if this is not the case
+if (( ! "$#" == 1 )); then
+    printf >&2 'usage: %s PASSWORD\n' "$(basename "${0}")"
+    exit 1
+fi
+
+# Get SHA-1 of string
+sha1hash="$(sha1sum < <(printf '%s' "${1}"))"
+prefix="${sha1hash:0:5}"
+suffix="${sha1hash:5:35}"
+
+# Search and match Pwned Passwords repository
+while IFS=':' read -r result amount; do
+    if [[ "${result}" == "${suffix^^}" ]]; then
+        printf 'Match found!\n'
+        printf 'Password appears %d times in data set.\n' "${amount%%[^0-9]*}"
+        exit 0
+    fi
+done < <(curl -sX GET https://api.pwnedpasswords.com/range/"${prefix^^}")
+
+# Getting at this point of the script means given password was not found
+printf 'No match found :)\n'
+exit 0
