@@ -6,7 +6,6 @@
 .config/mpdnotify.conf
 .config/mpv/mpv.conf
 .inputrc
-bin/hibp
 bin/listppa
 bin/startvm
 bin/unarchive
