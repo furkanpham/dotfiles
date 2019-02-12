@@ -15,7 +15,7 @@ export PATH="${HOME}/adb/platform-tools:${PATH}"
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
 
 # ESP-IDF
-export PATH+=":${HOME}/EmbeddedArm/gcc-arm-none-eabi-5_4-2016q3/bin"
+export PATH+=":${HOME}/EmbeddedArm/gcc-arm-none-eabi-8-2018-q4-major/bin"
 export PATH+=":${HOME}/esp/xtensa-esp32-elf/bin"
 export IDF_PATH="${HOME}/esp/esp-idf"
 export GPG_TTY=$(tty)
