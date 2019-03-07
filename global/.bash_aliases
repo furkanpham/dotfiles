@@ -9,8 +9,6 @@ alias cd..6='cd ../../../../../..'
 
 # shortcuts
 alias sudo='sudo '
-alias tm='tmux -2'
-alias ta='tmux attach'
 alias x='exit'
 alias o='xdg-open'
 alias v='vim'
@@ -23,6 +21,18 @@ function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1" || exit; }
 function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
 function duu() { sort -k 1,1hr -k 2,2f <(du -h -d 1 "${@}"); }
+function tm() {
+    case "${#}" in
+        1) tmux -2 new -s "${1}" ;;
+        *) tmux -2 "${@}" ;;
+    esac
+}
+function ta() {
+    case "${#}" in
+        1) tmux attach -t "${1}" ;;
+        *) tmux attach "${@}" ;;
+    esac
+}
 
 # default options
 alias ls='ls --color=auto --group-directories-first'
