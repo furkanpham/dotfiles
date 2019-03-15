@@ -12,6 +12,7 @@ bin/unarchive
 bin/padding-check
 bin/tag-check
 bin/music-sync
+bin/focus-on-keepass
 .ncmpcpp/bindings
 .gitignore_global
 .gitconfig
