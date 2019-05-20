@@ -9,8 +9,6 @@ alias cd..6='cd ../../../../../..'
 
 # shortcuts
 alias sudo='sudo '
-alias tm='tmux -2'
-alias ta='tmux attach'
 alias x='exit'
 alias o='xdg-open'
 alias v='vim'
@@ -23,6 +21,18 @@ function hgrep() { grep --color=auto "${@}" <(history); }
 function mdd() { mkdir -p "$1"; cd "$1" || exit; }
 function c() { sed '/\./ s/\.\{0,1\}0\{1,\}$//' <(bc -l <<< "${@}"); }
 function duu() { sort -k 1,1hr -k 2,2f <(du -h -d 1 "${@}"); }
+function tm() {
+    case "${#}" in
+        1) tmux -2 new -s "${1}" ;;
+        *) tmux -2 "${@}" ;;
+    esac
+}
+function ta() {
+    case "${#}" in
+        1) tmux attach -t "${1}" ;;
+        *) tmux attach "${@}" ;;
+    esac
+}
 
 # default options
 alias ls='ls --color=auto --group-directories-first'
@@ -91,7 +101,11 @@ alias reset-dns='sudo tee /etc/resolv.conf <<< "nameserver 127.0.1.1"'
 
 # metadata
 alias rpadding='metaflac --dont-use-padding --remove --block-type=PICTURE,PADDING *.flac'
-alias mqaid='python3 ~/git/mqaid/is_mqa.py'
+function mqaid() {
+    source "${HOME}/py-envs/env/bin/activate"
+    python3 "${HOME}/git/mqaid/is_mqa.py" "${@}"
+    deactivate
+}
 function show-tag() {
     if (( "$#" == 0 )); then
         for f in *.flac; do
@@ -126,15 +140,16 @@ alias adb-battery='adb shell dumpsys battery'
 alias adb-log='adb logcat'
 alias adb-ssh='adb forward tcp:8022 tcp:8022 && adb forward tcp:8080 tcp:8080 && ssh localhost -p 8022'
 function adb-dcim() {
+    dcim_path="/sdcard/DCIM/Camera"
     if (( "$#" == 0 )); then
         declare -a  files
         while read -r; do
             files+=( "${REPLY##* }" )
-        done < <(adb ls /sdcard/DCIM/Camera)
+        done < <(adb ls "${dcim_path}")
         column < <(printf "%s\n" "${files[@]}")
     else
         for f do
-            adb pull /sdcard/DCIM/Camera/"${f}"
+            adb pull "${dcim_path}"/"${f}"
         done
     fi
 }

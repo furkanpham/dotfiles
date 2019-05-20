@@ -1,0 +1,30 @@
+#!/bin/bash
+# list current jobs on lftp background procesess
+
+set -o errexit
+set -o pipefail
+
+shopt -s nullglob
+shopt -s dotglob
+
+sockets="${HOME}/.local/share/lftp/bg"
+
+for s in "${sockets}"/*; do
+    pid="${s##*-}"
+    lftpout="$(mktemp)"
+    printf '==> %s <==\n' "${s}"
+
+    lftp >/dev/null << EOF
+attach "${pid}"
+jobs > "${lftpout}"
+exit
+EOF
+
+    while read -r; do
+        printf '%s\n' "${REPLY}"
+    done < "${lftpout}"
+    printf '\n'
+    rm "${lftpout}"
+done
+
+exit 0

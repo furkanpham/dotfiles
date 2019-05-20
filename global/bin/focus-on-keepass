@@ -1,0 +1,24 @@
+#!/bin/bash
+# Move KeePassXC window to current workspace
+
+set -o errexit
+set -o pipefail
+
+# Get KeePassXC windowid
+while read -r; do
+    [[ "${REPLY}" =~ .*\ -\ KeePassXC$ ]] && { windowid="${REPLY%% *}"; break; }
+done < <(wmctrl -l)
+
+# Exit and return 1 if no window was found
+[[ -n "${windowid}" ]] || exit 1
+
+# Get current workspace
+while read -r workspace current _; do
+    [[ "${current}" == '*' ]] && break
+done < <(wmctrl -d)
+
+# Place KeePassXC window in current workspace
+wmctrl -ir "${windowid}" -t "${workspace}"
+wmctrl -ia "${windowid}"
+
+exit 0
