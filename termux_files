@@ -3,3 +3,4 @@
 .bash_aliases
 .tmux.conf
 .inputrc
+.termux/termux.properties
