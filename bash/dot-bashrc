@@ -1,0 +1,23 @@
+# shellcheck shell=bash
+# shellcheck source=/dev/null
+
+# Source global definitions
+if [[ -f /etc/bashrc ]]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+# shellcheck disable=SC2076 # I want to match literally
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# User specific aliases and functions
+if [[ -f ~/.bash_aliases ]]; then
+    . ~/.bash_aliases
+fi
+unset rc
+
+# Bash variables
+HISTCONTROL=ignoreboth # ignorespace and ignoredups

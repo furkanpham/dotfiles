@@ -1,7 +1,3 @@
-" Plugins
-execute pathogen#infect()
-filetype plugin indent on
-
 " Searches and highlights
 syntax on
 set hlsearch        " highlight matches

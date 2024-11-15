@@ -1,0 +1,7 @@
+# shellcheck shell=bash
+alias ls='ls --color=auto --group-directories-first'
+
+duu() { sort -k 1,1hr -k 2,2f <(du -h -d 1 "${@}"); }
+mdd() {
+    { mkdir -p "$1" && cd "$1"; } || return 1
+}
