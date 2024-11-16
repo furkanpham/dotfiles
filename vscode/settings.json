@@ -1,0 +1,11 @@
+{
+    "telemetry.telemetryLevel": "off",
+    "update.mode": "none",
+    "extensions.autoUpdate": false,
+    "extensions.ignoreRecommendations": true,
+    "workbench.enableExperiments": false,
+
+    "window.titleBarStyle": "custom",
+    "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.lineNumbers": "relative"
+}

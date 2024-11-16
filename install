@@ -19,6 +19,8 @@ create_batch() { destdir="${1}"; shift; packages=( "${@}" )
 main() {
     create_batch "${HOME}" \
         bash git vim tmux
+    create_batch "${HOME}/.config/Code/User" \
+        vscode
     create_batch "${HOME}/.var/app/io.mpv.Mpv/config/mpv" \
         mpv
 }
