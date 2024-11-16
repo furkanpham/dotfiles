@@ -5,3 +5,6 @@ duu() { sort -k 1,1hr -k 2,2f <(du -h -d 1 "${@}"); }
 mdd() {
     { mkdir -p "$1" && cd "$1"; } || return 1
 }
+
+# Flatpak aliases
+alias mpv='flatpak run io.mpv.Mpv'
