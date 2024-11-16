@@ -7,5 +7,20 @@
 
     "window.titleBarStyle": "custom",
     "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace",
-    "editor.lineNumbers": "relative"
+
+    "editor.lineNumbers": "relative",
+    "vim.smartRelativeLine": true,
+
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<space>"],
+            "commands": [":noh"]
+        }
+    ],
+
+    "vim.highlightedyank.enable": true,
+    "vim.highlightedyank.color": "#b8cd3660",
+    "vim.highlightedyank.duration": 250,
 }
